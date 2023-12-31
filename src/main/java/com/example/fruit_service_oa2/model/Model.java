@@ -1,8 +1,5 @@
 package com.example.fruit_service_oa2.model;
 
-import lombok.Data;
-
-
 public class Model<T> {
     Integer code;
     String msg;
