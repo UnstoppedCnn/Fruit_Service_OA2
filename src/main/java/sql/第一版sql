@@ -1,0 +1,63 @@
+create database oa;
+
+use oa;
+
+create table customer
+(
+    c_id           int auto_increment comment '唯一标识客户的id'
+        primary key,
+    name           varchar(20) null comment '客户的姓名c',
+    phone_num      char(11)    null comment '客户的电话号码',
+    `from`         char(20)    null comment '客户来自哪里',
+    age            int         null comment '客户的年龄',
+    sex            char(2)     null comment '客户的性别',
+    fruit_received int         null comment '可以接受的水果量',
+    birthday       date        null comment '客户的生日'
+)
+    comment '客户表';
+
+create table villager
+(
+    v_id         int auto_increment comment '唯一标识每一位村民的逐渐'
+        primary key,
+    account      varchar(11) not null comment '村民的账号信息,长度为11个字符',
+    name         varchar(20) null comment '村民的名字',
+    sex          char(2)     null comment '村民的性别',
+    home_num     char(8)     null comment '村民家门牌号',
+    home_person  int         null comment '村民家人口',
+    lambor       int         null comment '村民家劳动力',
+    phone_number char(11)    null comment '用户的电话号码',
+    birthday     date        null comment '用户的生日'
+)
+    comment '村民的信息表';
+
+create table land
+(
+    land_id      int          not null comment '土地ID'
+        primary key,
+    area         float        not null comment '土地面积',
+    location     varchar(255) not null comment '土地位置',
+    yield        float        null comment '产量',
+    v_id         int          not null comment '户主id',
+    avg_tree_age int          null comment '平均树龄',
+    constraint land_villager_v_id_fk
+        foreign key (v_id) references villager (v_id)
+);
+
+create table orders
+(
+    order_id                  int            not null comment '订单id'
+        primary key,
+    c_id                      int            not null comment '客户信息',
+    purchase_amount           float          not null comment '收购量',
+    land_id                   int            not null comment '土地信息',
+    maybe_completed_time      datetime       null comment '交易预计时间',
+    actual_completed_time     datetime       null comment '实际完成时间',
+    transaction_occurred_time datetime       null comment '交易发生时间',
+    penalty                   decimal(10, 2) null comment '违约金',
+    constraint orders_customer_c_id_fk
+        foreign key (c_id) references customer (c_id),
+    constraint orders_land_land_id_fk
+        foreign key (land_id) references land (land_id)
+);
+
